@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform Job Search - Earth</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: #f5f5f0;
+            color: #2c2c2c;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Subtle animated background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            z-index: 0;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, #2c2c2c 35px, #2c2c2c 36px),
+                repeating-linear-gradient(-45deg, transparent, transparent 35px, #2c2c2c 35px, #2c2c2c 36px);
+            animation: patternMove 60s linear infinite;
+        }
+
+        @keyframes patternMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            animation: gentleFloat 3s ease-in-out infinite;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: 400;
+            color: #2c2c2c;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #666;
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        /* Main card */
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 2.5rem 2rem;
+            box-shadow: 
+                0 2px 4px rgba(0,0,0,0.05),
+                0 8px 16px rgba(0,0,0,0.08);
+            animation: slideUp 1s ease-out;
+            position: relative;
+            border: 1px solid #e8e8e8;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #8b7355, #6b5d52, #8b7355);
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 0%; }
+            50% { background-position: 100% 0%; }
+        }
+
+        .intro-text {
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            font-size: 1rem;
+            color: #555;
+            animation: fadeInText 0.8s ease-out;
+        }
+
+        @keyframes fadeInText {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Form styling */
+        .form-group {
+            margin-bottom: 1.5rem;
+            animation: fadeInText 0.6s ease-out backwards;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.2s; }
+        .form-group:nth-child(2) { animation-delay: 0.3s; }
+        .form-group:nth-child(3) { animation-delay: 0.4s; }
+        .form-group:nth-child(4) { animation-delay: 0.5s; }
+        .form-group:nth-child(5) { animation-delay: 0.6s; }
+        .form-group:nth-child(6) { animation-delay: 0.7s; }
+        .form-group:nth-child(7) { animation-delay: 0.8s; }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #2c2c2c;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e8e8e8;
+            border-radius: 4px;
+            font-family: 'Georgia', serif;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: #fafaf8;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #8b7355;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(139, 115, 85, 0.1);
+        }
+
+        input::placeholder {
+            color: #999;
+            font-style: italic;
+        }
+
+        .hint {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 0.3rem;
+            font-style: italic;
+        }
+
+        /* Button */
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: #8b7355;
+            color: #fff;
+            border: 2px solid #8b7355;
+            border-radius: 4px;
+            font-size: 1.05rem;
+            font-family: 'Georgia', serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-submit::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-submit:hover {
+            background: #6b5d52;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(139, 115, 85, 0.3);
+        }
+
+        .btn-submit:active::before {
+            width: 400px;
+            height: 400px;
+        }
+
+        .btn-submit:disabled {
+            background: #ccc;
+            border-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Status message */
+        #statusMsg {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 0.95rem;
+            animation: fadeIn 0.5s ease-out;
+            display: none;
+        }
+
+        #statusMsg.show {
+            display: block;
+        }
+
+        #statusMsg.loading {
+            background: #e0e7ff;
+            color: #4338ca;
+            border: 1px solid #c7d2fe;
+        }
+
+        #statusMsg.success {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        #statusMsg.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        /* Back link */
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e8e8e8;
+            color: #8b7355;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #6b5d52;
+            transform: translateX(-5px);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #888;
+            animation: fadeIn 2s ease-out;
+        }
+
+        .made-with {
+            color: #666;
+            animation: heartbeat 2s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            10% { transform: scale(1.1); }
+            20% { transform: scale(1); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .title {
+                font-size: 1.75rem;
+            }
+
+            .subtitle {
+                font-size: 0.9rem;
+            }
+
+            .logo {
+                font-size: 2.5rem;
+            }
+
+            .card {
+                padding: 2rem 1.5rem;
+            }
+
+            .intro-text {
+                font-size: 0.95rem;
+            }
+
+            label {
+                font-size: 0.9rem;
+            }
+
+            input, select {
+                padding: 0.65rem;
+                font-size: 0.9rem;
+            }
+
+            .btn-submit {
+                padding: 0.9rem;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0;
+            }
+
+            .title {
+                font-size: 1.5rem;
+            }
+
+            .logo {
+                font-size: 2.2rem;
+            }
+
+            .card {
+                padding: 1.5rem 1.2rem;
+            }
+
+            .intro-text {
+                font-size: 0.9rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .form-group {
+                margin-bottom: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">🌍</div>
+            <h1 class="title">Platform Search</h1>
+            <p class="subtitle">Let's find some jobs together</p>
+        </div>
+
+        <div class="card">
+            <div class="intro-text">
+                Alright, just fill in what you're looking for below. Don't worry about getting everything perfect - just the basics like job title and location. I'll take care of the rest and get you a nice CSV file with all the details.
+            </div>
+
+            <form id="platformForm">
+                <div class="form-group">
+                    <label for="search_term">What job are you looking for?</label>
+                    <input type="text" id="search_term" name="search_term" placeholder="software engineer" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="location">Where do you want to work?</label>
+                    <input type="text" id="location" name="location" placeholder="Hyderabad, Telangana, India" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="results_wanted">How many results? (max 100)</label>
+                    <input type="number" id="results_wanted" name="results_wanted" value="20" min="1" max="100">
+                    <div class="hint">More results = might take a bit longer</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="hours_old">How recent? (in hours)</label>
+                    <input type="number" id="hours_old" name="hours_old" value="72">
+                    <div class="hint">72 hours = last 3 days</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="google_search_term">Custom search (optional)</label>
+                    <input type="text" id="google_search_term" name="google_search_term" placeholder="software engineer jobs near Hyderabad">
+                    <div class="hint">Leave blank if you're not sure</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="linkedin_fetch_description">Get full LinkedIn descriptions?</label>
+                    <select id="linkedin_fetch_description" name="linkedin_fetch_description">
+                        <option value="true" selected>Yes please</option>
+                        <option value="false">Nah, just basics</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="output_csv">File name for download</label>
+                    <input type="text" id="output_csv" name="output_csv" value="platform_jobs.csv">
+                </div>
+
+                <button type="submit" class="btn-submit">Let's Go Find Jobs</button>
+            </form>
+
+            <div id="statusMsg"></div>
+
+            <a href="/" class="back-link">← Back to Home</a>
+
+            
+            <div class="footer">
+                <p class="made-with">Hecho con 🤞 para ❤️</p>
+                <p class="footer-note">Know about me? <a href="https://www.linkedin.com/in/srinadhch07/">I'm Srinadh</a></p>
+                <p class="footer-note">Everything downloads as a CSV file instantly</p>
+                <p class="footer-note">This platform is just another small effort to get you a job. I wish it will be helpfull</p>
+                
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Logo interaction
+        const logo = document.querySelector('.logo');
+        logo.addEventListener('click', () => {
+            logo.style.animation = 'none';
+            setTimeout(() => {
+                logo.style.animation = 'gentleFloat 3s ease-in-out infinite';
+            }, 10);
+            logo.style.transform = 'rotate(360deg) scale(1.2)';
+            setTimeout(() => {
+                logo.style.transform = '';
+            }, 500);
+        });
+
+        // Form submission
+        const form = document.getElementById("platformForm");
+        const statusMsg = document.getElementById("statusMsg");
+        const submitBtn = form.querySelector('.btn-submit');
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            statusMsg.className = 'show loading';
+            statusMsg.innerText = "⏳ Hang tight, searching for jobs... this might take a minute";
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Searching...";
+
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch("/scrape/platform", {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.status === "success") {
+                    statusMsg.className = 'show success';
+                    statusMsg.innerText = "✅ Got them! Your CSV is downloading now...";
+                    
+                    window.location.href = data.download_url;
+                    
+                    setTimeout(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = "Let's Go Find Jobs";
+                    }, 2000);
+                } else {
+                    statusMsg.className = 'show error';
+                    statusMsg.innerText = data.message || "Hmm, something went wrong. Mind trying again?";
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "Let's Go Find Jobs";
+                }
+
+            } catch (error) {
+                statusMsg.className = 'show error';
+                statusMsg.innerText = "Hey, we're having some trouble right now. Could you shoot an email to srinadhc07@gmail.com? Thanks!";
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Let's Go Find Jobs";
+            }
+        });
+
+        // Gentle card tilt effect (disabled on mobile)
+        const card = document.querySelector('.card');
+        let cardTransform = window.innerWidth > 768;
+
+        if (cardTransform) {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 80;
+                const rotateY = (centerX - x) / 80;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+            });
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth <= 768 && cardTransform) {
+                card.style.transform = 'none';
+                cardTransform = false;
+            } else if (window.innerWidth > 768 && !cardTransform) {
+                cardTransform = true;
+            }
+        });
+    </script>
+</body>
+</html>

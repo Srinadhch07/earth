@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earth - Job Search Made Simple</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: #f5f5f0;
+            color: #2c2c2c;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Subtle animated background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            z-index: 0;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, #2c2c2c 35px, #2c2c2c 36px),
+                repeating-linear-gradient(-45deg, transparent, transparent 35px, #2c2c2c 35px, #2c2c2c 36px);
+            animation: patternMove 60s linear infinite;
+        }
+
+        @keyframes patternMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            animation: gentleFloat 3s ease-in-out infinite;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 400;
+            color: #2c2c2c;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #666;
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        /* Main card */
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 2.5rem 2rem;
+            box-shadow: 
+                0 2px 4px rgba(0,0,0,0.05),
+                0 8px 16px rgba(0,0,0,0.08);
+            animation: slideUp 1s ease-out;
+            position: relative;
+            border: 1px solid #e8e8e8;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #8b7355, #6b5d52, #8b7355);
+            background-size: 200% 100%;
+            animation: gradientShift 3s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 0%; }
+            50% { background-position: 100% 0%; }
+        }
+
+        /* Conversational text */
+        .text-block {
+            margin-bottom: 1.5rem;
+            line-height: 1.9;
+            animation: fadeInText 0.8s ease-out backwards;
+            font-size: 1.05rem;
+            color: #444;
+        }
+
+        .text-block:nth-child(1) { animation-delay: 0.3s; }
+        .text-block:nth-child(2) { animation-delay: 0.5s; }
+        .text-block:nth-child(3) { animation-delay: 0.7s; }
+        .text-block:nth-child(4) { animation-delay: 0.9s; }
+        .text-block:nth-child(5) { animation-delay: 1.1s; }
+        .text-block:nth-child(6) { animation-delay: 1.3s; }
+
+        @keyframes fadeInText {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Buttons centered in content */
+        .button-section {
+            text-align: center;
+            margin: 2.5rem 0;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .button-label {
+            font-size: 1.05rem;
+            color: #666;
+            margin-bottom: 1.2rem;
+            font-style: italic;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 1.05rem;
+            font-family: 'Georgia', serif;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            display: inline-block;
+            min-width: 200px;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: #8b7355;
+            color: #fff;
+            border-color: #8b7355;
+        }
+
+        .btn-primary:hover {
+            background: #6b5d52;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(139, 115, 85, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #8b7355;
+            border-color: #8b7355;
+        }
+
+        .btn-secondary:hover {
+            background: #8b7355;
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(139, 115, 85, 0.2);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e8e8e8;
+            font-size: 0.95rem;
+            color: #888;
+            animation: fadeIn 2s ease-out;
+        }
+
+        .footer-note {
+            margin-bottom: 0.8rem;
+            font-style: italic;
+        }
+
+        .made-with {
+            color: #666;
+            animation: heartbeat 2s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            10% { transform: scale(1.1); }
+            20% { transform: scale(1); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .title {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 0.9rem;
+            }
+
+            .logo {
+                font-size: 2.5rem;
+            }
+
+            .card {
+                padding: 2rem 1.5rem;
+            }
+
+            .text-block {
+                font-size: 1rem;
+                line-height: 1.8;
+            }
+
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 280px;
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+
+            .button-label {
+                font-size: 1rem;
+            }
+
+            .footer-note {
+                font-size: 0.9rem;
+            }
+
+            .made-with {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0;
+            }
+
+            .title {
+                font-size: 1.75rem;
+            }
+
+            .logo {
+                font-size: 2.2rem;
+            }
+
+            .card {
+                padding: 1.5rem 1.2rem;
+            }
+
+            .text-block {
+                font-size: 0.95rem;
+                margin-bottom: 1.2rem;
+            }
+
+            .btn {
+                padding: 0.9rem 1.5rem;
+                font-size: 0.95rem;
+            }
+
+            .button-section {
+                margin: 2rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+
+    <div class="container">
+        <div class="header">
+            <div class="logo">🌍</div>
+            <h1 class="title">Earth</h1>
+            <p class="subtitle">Your friendly job search helper</p>
+        </div>
+
+        <div class="card">
+            <div class="text-block">
+                Hey! So I was job hunting a few months back, and man... it was exhausting. You know that feeling? Opening like 20 tabs, copying job details into a spreadsheet, getting lost in all these different websites. By the end of the day, I'd forget which jobs I even looked at.
+            </div>
+
+            <div class="text-block">
+                That's why I made this. It's super simple - you tell it what you're looking for, and it goes out and finds jobs from Google and all the major platforms. Then boom, you get everything in a nice CSV file. No messing around.
+            </div>
+
+            <div class="text-block">
+                The best part? It's completely free. No "sign up for our premium plan" stuff, no credit card, no email verification. I just wanted to make something that actually helps people without any of that noise.
+            </div>
+
+            <div class="button-section">
+                <div class="button-label">So, where do you want to start?</div>
+                <div class="buttons">
+                    <a href="/google" class="btn btn-primary">Search on Web</a>
+                    <a href="/platform" class="btn btn-secondary">Search Platforms</a>
+                </div>
+            </div>
+
+            <div class="text-block">
+                That's really it. Pick one, search for jobs, download your results, and go apply. No confusion, no wasting time clicking through a million pages. Just straightforward job hunting.
+            </div>
+
+            <div class="text-block">
+                You've got better things to do than fight with job search sites, right? Come in, grab what you need, and get back to what matters - actually landing that job.
+            </div>
+
+            <div class="footer">
+                <p class="made-with">Hecho con 🤞 para ❤️</p>
+                <p class="footer-note">Know about me? <a href="https://www.linkedin.com/in/srinadhch07/">I'm Srinadh</a></p>
+                <p class="footer-note">Everything downloads as a CSV file instantly</p>
+                <p class="footer-note">This platform is just another small effort to get you a job. I wish it will be helpfull</p>
+                
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Logo interaction
+        const logo = document.querySelector('.logo');
+        logo.addEventListener('click', () => {
+            logo.style.animation = 'none';
+            setTimeout(() => {
+                logo.style.animation = 'gentleFloat 3s ease-in-out infinite';
+            }, 10);
+            logo.style.transform = 'rotate(360deg) scale(1.2)';
+            setTimeout(() => {
+                logo.style.transform = '';
+            }, 500);
+        });
+
+        // Gentle hover effect on card
+        const card = document.querySelector('.card');
+        let cardTransform = true;
+
+        // Disable 3D effect on mobile
+        if (window.innerWidth <= 768) {
+            cardTransform = false;
+        }
+
+        if (cardTransform) {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 50;
+                const rotateY = (centerX - x) / 50;
+                
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+            });
+        }
+
+        // Button hover effects
+        const buttons = document.querySelectorAll('.btn');
+        buttons.forEach(button => {
+            button.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px)';
+            });
+            
+            button.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Handle window resize for responsive behavior
+        window.addEventListener('resize', () => {
+            if (window.innerWidth <= 768 && cardTransform) {
+                card.style.transform = 'none';
+                cardTransform = false;
+            } else if (window.innerWidth > 768 && !cardTransform) {
+                cardTransform = true;
+            }
+        });
+    </script>
+</body>
+</html>
