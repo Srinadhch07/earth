@@ -1,9 +1,8 @@
 import csv
 import time
 from typing import Optional, List, Dict, Any
-# from serpapi.google_search import GoogleSearch
+
 from serpapi import GoogleSearch
-from serpapi.exceptions import SerpApiError
 
 
 def scrape_jobs_google(
@@ -34,14 +33,17 @@ def scrape_jobs_google(
         search = GoogleSearch(params)
         results: Dict[str, Any] = search.get_dict()
 
+        # 🔍 Handle SerpAPI response-level errors
         error_msg = results.get("error")
-
         if error_msg:
-            if "exceeded" in error_msg.lower():
-                print(" SerpAPI credit limit exceeded")
+            error_lower = error_msg.lower()
+
+            if "exceeded" in error_lower:
+                print("SerpAPI credit limit exceeded")
                 return None
-            if "rate limit" in error_msg.lower():
-                print("Rate limited by SerpAPI, retrying once...")
+
+            if "rate limit" in error_lower:
+                print(" Rate limited by SerpAPI, retrying once...")
                 time.sleep(2)
                 results = GoogleSearch(params).get_dict()
             else:
@@ -55,7 +57,7 @@ def scrape_jobs_google(
         )
 
         if not job_results:
-            print("No job results found")
+            print(" No job results found")
             return None
 
         try:
@@ -89,13 +91,10 @@ def scrape_jobs_google(
             print(f" File write error: {file_err}")
             return None
 
-        print(f"aved {len(job_results)} jobs to {output_csv}")
+        print(f" Saved {len(job_results)} jobs to {output_csv}")
         return output_csv
 
-    except SerpApiError as e:
-        print(f" SerpAPI exception: {e}")
-        return None
-
     except Exception as e:
-        print(f" Unexpected error: {e}")
+        # This safely catches all SerpAPI / network / parsing issues
+        print(f"❌ Unexpected error: {e}")
         return None
