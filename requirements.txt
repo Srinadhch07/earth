@@ -1,6 +1,6 @@
 fastapi
 uvicorn
-serpapi
+google-search-results
 python-jobspy
 pandas
 python-dotenv
