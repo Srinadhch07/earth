@@ -1,7 +1,8 @@
 import csv
 import time
 from typing import Optional, List, Dict, Any
-from serpapi.google_search import GoogleSearch
+# from serpapi.google_search import GoogleSearch
+from serpapi import GoogleSearch
 from serpapi.exceptions import SerpApiError
 
 
